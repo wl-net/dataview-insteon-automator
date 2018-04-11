@@ -36,6 +36,7 @@ class DataviewInsteonAutomator(object):
   def turn_off(self, device):
     return self.hub.dimmer(device).on(0)
 
+
 class DataviewRPCServer(aiohttp.server.ServerHttpProtocol):
   def __init__(self, dispatch_functions, auth_token):
     self.dispatch_functions = dispatch_functions
@@ -158,7 +159,7 @@ def main():
   loop = asyncio.get_event_loop()
   c = DataviewInsteonAutomator(os.environ.get('INSTEON_HOSTNAME'),
                                os.environ.get('INSTEON_USERNAME'),
-                               os.environ.get('INSTEON_PASSWORD'));
+                               os.environ.get('INSTEON_PASSWORD'))
   f = loop.create_server(
     lambda: DataviewRPCServer(
       {
