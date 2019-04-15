@@ -29,12 +29,16 @@ def constant_time_equals(val1, val2):
 class DataviewInsteonAutomator(object):
   def __init__(self, hostname, username=None, password=None, port='25105'):
     self.hub = hub = Hub(hostname, username, password, port)
+    self.devices = self.hub.get_linked()
 
   def turn_on(self, device, level):
     return self.hub.dimmer(device).on(level)
 
   def turn_off(self, device):
     return self.hub.dimmer(device).on(0)
+
+  def get_linked_devices(self):
+    return json.dumps(self.devices)
 
 
 class DataviewRPCServer(aiohttp.server.ServerHttpProtocol):
@@ -165,6 +169,7 @@ def main():
       {
         'turn_on': lambda device, level: c.turn_on(device, level),
         'turn_off': lambda device: c.turn_off(device),
+        'get_linked_devices': lambda: c.get_linked_devices(),
       }, os.environ.get('RPCSERVER_TOKEN')
     ),
     args.host, args.port,
